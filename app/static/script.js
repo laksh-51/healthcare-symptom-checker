@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingIndicator = document.getElementById('loading-indicator');
     const resultsContent = document.getElementById('results-content');
     
-    // Initial state setup
+    // Add class to results card to trigger the animation styles
     resultsCard.classList.add('hidden');
     
     submitButton.addEventListener('click', async () => {
@@ -15,11 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // 1. Start Loading State and Hide Previous Results
+        // 1. Start Loading State
         resultsCard.classList.remove('hidden');
         resultsContent.classList.add('hidden');
         loadingIndicator.classList.remove('hidden');
-        submitButton.disabled = true; // Disable button while loading
+        submitButton.disabled = true;
+        
+        // Reset card opacity/transform if it was previously shown/hidden
+        resultsCard.style.opacity = '0';
+        resultsCard.style.transform = 'translateY(10px)';
         
         try {
             const response = await fetch('/check-symptoms', {
@@ -31,11 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (response.ok) {
-                // 2. Display Results
+                console.log("API Success! Data received:", data); // DEBUGGING: Confirm data structure
+                
+                // 2. Display Results Content
                 displayResults(data);
                 resultsContent.classList.remove('hidden');
+                
+                // --- FIX: Trigger the Final Reveal Animation ---
+                // This removes the CSS-based hiding styles (opacity/transform)
+                // The CSS transition properties will handle the smooth fade-in/slide-up effect
+                resultsCard.style.opacity = '1';
+                resultsCard.style.transform = 'translateY(0)';
+                // ------------------------------------------------
+                
             } else {
-                // 3. Handle API Errors (400, 500)
                 alert(`Error: ${data.detail || 'An unknown error occurred.'}`);
             }
             
@@ -43,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Fetch error:', error);
             alert('A network error occurred. Check server connection.');
         } finally {
-            // 4. End Loading State
+            // 3. End Loading State
             loadingIndicator.classList.add('hidden');
             submitButton.disabled = false;
         }
@@ -52,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayResults(data) {
         document.getElementById('possible-conditions').innerHTML = data.possible_conditions.map(item => `<li>${item}</li>`).join('');
         
-        // Highlight Red Flags
         document.getElementById('red-flags').innerHTML = data.red_flags.map(item => 
             `<li class="red-flag-item">${item}</li>`
         ).join('');
