@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom Checker</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Healthcare Symptom Checker</h1>
+            <p class="tagline">Educational guidance, powered by Gemini.</p>
+        </header>
+
+        <div class="card input-card">
+            <label for="symptoms-input">Describe your symptoms:</label>
+            <textarea id="symptoms-input" placeholder="e.g., Sharp chest pain, difficulty breathing, dizziness..." rows="5"></textarea>
+            <button id="submit-button">Check Symptoms</button>
+        </div>
+
+        <div id="results-card" class="card results-card hidden">
+            <h2 class="result-header">Analysis Result</h2>
+            
+            <div id="loading-indicator" class="hidden">
+                <div class="spinner"></div> 
+                <p>Processing request. Please wait...</p>
+            </div>
+
+            <div id="results-content" class="hidden">
+                <h3>Possible Condition Categories:</h3>
+                <ul id="possible-conditions"></ul>
+                
+                <h3>Red Flags to Watch:</h3>
+                <ul id="red-flags"></ul>
+
+                <h3>Recommended Next Steps:</h3>
+                <ul id="next-steps"></ul>
+
+                <div class="disclaimer-box">
+                    <p class="disclaimer-text"><strong>Disclaimer:</strong> This information is for educational purposes only. Consult a qualified medical professional for any health concerns.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
