@@ -73,13 +73,23 @@ async def check_symptoms(request: SymptomRequest):
 
     # 2. Parse and Validate LLM JSON output
     try:
-        # --- FIX: Clean the LLM output string to remove ```json markdown ---
+        # Step 2a: Clean the LLM output string to remove ```json markdown
         clean_output = llm_output.strip()
         if clean_output.startswith("```"):
             clean_output = clean_output.strip("`").lstrip("json").strip()
-        # -----------------------------------------------------------------
 
-        llm_data_dict = json.loads(clean_output)
+        # Step 2b: NEW ROBUSTNESS FIX - Slice the string to ensure it ONLY contains the JSON object
+        start_index = clean_output.find('{')
+        end_index = clean_output.rfind('}')
+        
+        if start_index != -1 and end_index != -1 and end_index > start_index:
+            # Slice the string to include only the JSON object (from first { to last })
+            json_string = clean_output[start_index : end_index + 1]
+        else:
+            # Fallback to the original cleaned output if braces aren't found
+            json_string = clean_output
+        
+        llm_data_dict = json.loads(json_string)
         validated_response = LLMResponse(**llm_data_dict)
     except (json.JSONDecodeError, ValidationError) as e:
         print(f"LLM output parsing/validation error: {e}. Raw output: {llm_output}")
@@ -94,13 +104,18 @@ async def check_symptoms(request: SymptomRequest):
     # 4. Return the validated Pydantic object
     return validated_response
 
-
 @app.get("/history")
 async def get_history():
     """API endpoint to fetch the last 10 query logs."""
     try:
+        # get_query_history will now raise a RuntimeError if it fails
         history_logs = get_query_history(limit=10)
         return {"history": history_logs}
     except Exception as e:
+        # MANUAL RAISE EXCEPTION for history endpoint failures
         print(f"History endpoint error: {e}")
-        raise HTTPException(status_code=500, detail="Could not retrieve query history.")
+        # The detail will now contain the full error message from app/db.py
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Internal Error in History Fetch: {e}"
+        )

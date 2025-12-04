@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     --------------------------------------------------------- */
 
     viewHistoryButton.addEventListener('click', () => {
+        console.log("History button clicked. Attempting to fetch history..."); // DEBUG
         fetchHistory();
         historyModal.classList.remove('hidden');
     });
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ---------------------------------------------------------
-       FETCH HISTORY (FIXED + ROBUST)
+       FETCH HISTORY (FINAL CORRECTED VERSION)
     --------------------------------------------------------- */
 
     async function fetchHistory() {
@@ -42,25 +43,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch('/history');
+            console.log("History fetch response status:", response.status); // DEBUG
             const json = await response.json();
 
             if (response.ok && json.history && json.history.length > 0) {
+                console.log("Successfully fetched history data:", json.history); // DEBUG
 
                 historyList.innerHTML = json.history
                     .map(item => {
-                        const llmResponse = item.llm_response_json;
-
+                        let llmResponse = item.llm_response_json;
+                        
+                        // FIX: Check if the response is a JSON string and parse it if necessary
+                        if (typeof llmResponse === 'string') {
+                            try {
+                                llmResponse = JSON.parse(llmResponse);
+                            } catch (e) {
+                                // This internal error should not stop the loop
+                                console.error("Failed to parse history JSON string for item:", item.id, e); 
+                                llmResponse = null; 
+                            }
+                        }
+                        
+                        // Robustly check for and join conditions
                         const conditions =
                             llmResponse &&
                             Array.isArray(llmResponse.possible_conditions)
                                 ? llmResponse.possible_conditions.join(', ')
                                 : 'Conditions not available';
 
+                        // Ensure timestamp is a string (it should be after the Python fix)
+                        const timestamp = item.query_timestamp || 'Time unavailable';
+
                         return `
                             <div class="history-item">
                                 <div class="history-meta">
                                     <strong>ID: ${item.id}</strong>
-                                    <span class="history-date">${item.query_timestamp}</span>
+                                    <span class="history-date">${timestamp}</span>
                                 </div>
 
                                 <p class="history-input">
@@ -76,13 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .join('');
             } else {
+                console.log("History array is empty or response not OK.", json); // DEBUG
                 historyList.innerHTML = '<p class="loading-message">No history recorded yet.</p>';
             }
 
         } catch (error) {
-            console.error('Error fetching history:', error);
+            // This is the network/fatal parsing error catch
+            console.error('CRITICAL Error fetching history:', error); 
             historyList.innerHTML =
-                '<p class="error-message">Failed to load history. Please try again later.</p>';
+                '<p class="error-message">Failed to load history. Please check server logs.</p>';
         }
     }
 
