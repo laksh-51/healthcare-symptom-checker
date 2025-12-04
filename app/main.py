@@ -10,7 +10,7 @@ from starlette.requests import Request
 # ----------------------------
 
 from app.llm_client import query_llm
-from app.db import create_query_table, log_query_result
+from app.db import create_query_table, log_query_result, get_query_history
 
 app = FastAPI(title="Healthcare Symptom Checker")
 
@@ -93,3 +93,14 @@ async def check_symptoms(request: SymptomRequest):
 
     # 4. Return the validated Pydantic object
     return validated_response
+
+
+@app.get("/history")
+async def get_history():
+    """API endpoint to fetch the last 10 query logs."""
+    try:
+        history_logs = get_query_history(limit=10)
+        return {"history": history_logs}
+    except Exception as e:
+        print(f"History endpoint error: {e}")
+        raise HTTPException(status_code=500, detail="Could not retrieve query history.")

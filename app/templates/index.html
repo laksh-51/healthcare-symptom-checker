@@ -7,9 +7,16 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+
     <div class="main-container">
         <header>
-            <h1>Healthcare Symptom Checker</h1>
+            <div class="header-content">
+                <h1>Healthcare Symptom Checker</h1>
+
+                <!-- ⭐ ADDED: View History Button -->
+                <button id="view-history-button" class="history-button">View History</button>
+            </div>
+
             <p class="tagline">Educational guidance, powered by AI.</p>
         </header>
 
@@ -40,6 +47,16 @@
                 <div class="disclaimer-box">
                     <p class="disclaimer-text"><strong>Disclaimer:</strong> This information is for educational purposes only. Consult a qualified medical professional for any health concerns.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="history-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-modal-button" class="close-button">&times;</span>
+            <h2>Query History (Last 10)</h2>
+            <div id="history-list" class="history-list">
+                <p class="loading-message">Loading history...</p>
             </div>
         </div>
     </div>

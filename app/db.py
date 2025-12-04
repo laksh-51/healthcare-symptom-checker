@@ -66,3 +66,35 @@ def log_query_result(symptoms_input: str, llm_response: Dict[str, Any]):
             print(f"Error logging query to database: {e}")
         finally:
             conn.close()
+
+def get_query_history(limit: int = 10) -> list:
+    """Fetches the most recent symptom queries from the database."""
+    conn = get_db_connection()
+    history = []
+    if conn:
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    SELECT 
+                        id, 
+                        symptoms_input, 
+                        llm_response_json, 
+                        query_timestamp 
+                    FROM symptom_queries
+                    ORDER BY id DESC
+                    LIMIT %s;
+                """, (limit,))
+                
+                columns = [desc[0] for desc in cursor.description]
+                
+                for row in cursor.fetchall():
+                    item = dict(zip(columns, row))
+                    item['query_timestamp'] = item['query_timestamp'].strftime("%Y-%m-%d %H:%M:%S")
+                    history.append(item)
+        
+        except Exception as e:
+            print(f"Error fetching history from database: {e}")
+        finally:
+            conn.close()
+            
+    return history

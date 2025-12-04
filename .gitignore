@@ -1,0 +1,73 @@
+-------------------------------------------------------------------
+
+Security: NEVER commit API keys, passwords, or configuration secrets
+
+-------------------------------------------------------------------
+
+.env
+*.key
+*.pem
+*.p12
+
+-------------------------------------------------------------------
+
+Python Environment and Compilation Files
+
+-------------------------------------------------------------------
+
+Virtual environment (Python standard)
+
+venv/
+.venv/
+
+Byte-compiled files
+
+pycache/
+*.pyc
+*.o
+*.so
+
+Installer metadata
+
+*.egg-info/
+dist/
+
+Logs and databases
+
+*.log
+
+If you used a local PostgreSQL data directory:
+
+pgdata/
+
+If you used a local SQLite file (not applicable here, but common):
+
+*.sqlite3
+
+-------------------------------------------------------------------
+
+Operating System and Editor Files (Windows, VS Code, etc.)
+
+-------------------------------------------------------------------
+
+VS Code specific files
+
+.vscode/*
+
+Windows thumbnail database
+
+Thumbs.db
+
+macOS files
+
+.DS_Store
+
+-------------------------------------------------------------------
+
+FastAPI/Uvicorn related build files
+
+-------------------------------------------------------------------
+
+uvicorn build/temp files
+
+.pytest_cache/
