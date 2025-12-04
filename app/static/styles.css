@@ -339,7 +339,6 @@ button:disabled {
 .modal-close-btn:hover {
     color: var(--color-red-flag); /* Change the X color to red on hover */
     background-color: rgba(207, 58, 76, 0.1); /* Subtle red background on hover */
-    /* Note: 207, 58, 76 are the RGB values for --color-red-flag: #cf3a4c */
 }
 
 /* Header Button Layout */

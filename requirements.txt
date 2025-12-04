@@ -3,5 +3,4 @@ uvicorn
 pydantic
 python-dotenv
 openai
-google-genai # For using the Google Gen AI SDK directly, if you decide to switch clients
 psycopg2-binary

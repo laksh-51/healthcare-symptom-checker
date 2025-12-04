@@ -1,73 +1,57 @@
--------------------------------------------------------------------
-
-Security: NEVER commit API keys, passwords, or configuration secrets
-
--------------------------------------------------------------------
-
+# -------------------------------------------------------------------
+# Security: Never commit API keys, passwords, or configuration secrets
+# -------------------------------------------------------------------
 .env
 *.key
 *.pem
 *.p12
 
--------------------------------------------------------------------
+# -------------------------------------------------------------------
+# Python Environment and Compilation Files
+# -------------------------------------------------------------------
 
-Python Environment and Compilation Files
-
--------------------------------------------------------------------
-
-Virtual environment (Python standard)
-
+# Virtual environments
 venv/
 .venv/
 
-Byte-compiled files
-
-pycache/
-*.pyc
-*.o
+# Byte-compiled files
+__pycache__/
+*.py[cod]
 *.so
+*.o
 
-Installer metadata
-
+# Installer metadata
 *.egg-info/
 dist/
 
-Logs and databases
-
+# Logs and databases
 *.log
 
-If you used a local PostgreSQL data directory:
-
+# PostgreSQL local data directory
 pgdata/
 
-If you used a local SQLite file (not applicable here, but common):
-
+# SQLite files
 *.sqlite3
 
--------------------------------------------------------------------
+# -------------------------------------------------------------------
+# Operating System and Editor Files
+# -------------------------------------------------------------------
 
-Operating System and Editor Files (Windows, VS Code, etc.)
+# VS Code specific files
+.vscode/
 
--------------------------------------------------------------------
-
-VS Code specific files
-
-.vscode/*
-
-Windows thumbnail database
-
+# Windows thumbnail database
 Thumbs.db
 
-macOS files
-
+# macOS system files
 .DS_Store
 
--------------------------------------------------------------------
+# -------------------------------------------------------------------
+# FastAPI / Uvicorn / Pytest temporary files
+# -------------------------------------------------------------------
 
-FastAPI/Uvicorn related build files
+# Uvicorn build/temp files
+build/temp/
 
--------------------------------------------------------------------
-
-uvicorn build/temp files
-
+# Pytest cache
 .pytest_cache/

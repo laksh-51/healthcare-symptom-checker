@@ -4,12 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# --- GEMINI API CLIENT INITIALIZATION ---
 client = openai.OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
     api_key=os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY")
 )
-# --- END ---
 
 
 def query_llm(symptoms: str):

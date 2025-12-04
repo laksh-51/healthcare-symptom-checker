@@ -3,7 +3,6 @@ from pydantic import BaseModel, ValidationError
 from typing import List, Union, Dict, Any
 import json
 
-# --- NEW FRONTEND IMPORTS ---
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
@@ -14,14 +13,10 @@ from app.db import create_query_table, log_query_result, get_query_history
 
 app = FastAPI(title="Healthcare Symptom Checker")
 
-# --- FRONTEND SETUP ---
-# Initialize Jinja2Templates to find HTML files in app/templates
 templates = Jinja2Templates(directory="app/templates")
 
-# Mount StaticFiles to serve CSS, JS, etc., from app/static/
-# Files will be accessible at http://127.0.0.1:8000/static/...
+
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-# ----------------------
 
 
 # Define Pydantic model for the expected LLM output
