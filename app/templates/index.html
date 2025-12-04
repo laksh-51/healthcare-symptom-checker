@@ -51,14 +51,16 @@
 
     <div id="history-modal" class="modal hidden">
         <div class="modal-content">
-            <span id="close-modal-button" class="close-button">&times;</span>
-            <h2>Query History (Last 10)</h2>
-            <div id="history-list" class="history-list">
-                <p class="loading-message">Loading history...</p>
-            </div>
+              <div class="modal-header-controls">
+               <h2>Query History (Last 10)</h2>
+               <button id="close-modal-button" class="modal-close-btn">&times;</button>
+                </div>
+        <div id="history-list" class="history-list">
+            <p class="loading-message">Loading history...</p>
+         </div>
         </div>
     </div>
-
+    
     <script src="/static/script.js"></script>
 </body>
 </html>
